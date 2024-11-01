@@ -3,7 +3,7 @@ favicon: /img/favicon.png
 avatar: /img/avatar.jpg
 # if author sets in hexo_config, this string doesn't work
 author: 'Quanxiang Liu'
-author_bio: 'Undergraduate students at Northwestern Polytechnic University. Focusing on computer vision, SLAM and robotics.'
+author_bio: 'Focusing on NeRF, 3DGS, SLAM and Robotics.'
 
 since: 2022
 
@@ -51,7 +51,7 @@ e_social_links:
 # CV download link
 cv_dl:
   enable: true
-  dir: /attaches/CV_20220612.pdf
+  dir: /attaches/CV_20241101.pdf
   description: CV
 
 # Box-shadow
