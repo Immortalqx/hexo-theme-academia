@@ -4,10 +4,10 @@
     button.menus_icon
         .navicon
     ul.menus_items
-        each value, label in theme.menu
-            if !Array.isArray(value)
+        each item in navMenu
+            if !item.items
                 li.menus_item
-                    a.site-page(href=url_for(trim(value.split('||')[0])))=' ' + label
+                    a.site-page(href=url_for(item.href))=' ' + item.label
             else
                 li.menus_item
-                    a.site-page=' ' + trim(label.split('||')[0])
+                    a.site-page=' ' + item.label

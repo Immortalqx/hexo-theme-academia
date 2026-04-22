@@ -1,5 +1,78 @@
 doctype html
 html(lang=config.language)
+    -
+        var navMenu = []
+        var sourceMenu = theme.menu || {}
+        var academiaArticle = null
+        if (page && page.posts && page.posts.data) {
+            for (var i = 0; i < page.posts.data.length; i++) {
+                if (page.posts.data[i].academia) {
+                    academiaArticle = page.posts.data[i]
+                    break
+                }
+            }
+        }
+
+        //- On the homepage, prefer the actual rendered H1 titles so navigation
+        //- stays in sync with markdown headings in the academia post.
+        if (academiaArticle && academiaArticle.content) {
+            var headingRegex = /<h1\b[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/h1>/g
+            var match = null
+            while ((match = headingRegex.exec(academiaArticle.content)) !== null) {
+                var headingLabel = match[2]
+                    .replace(/<a\b[^>]*class="headerlink"[^>]*><\/a>/g, '')
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&lt;/g, '<')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&quot;/g, '"')
+                    .replace(/&#39;/g, "'")
+                    .trim()
+                if (headingLabel) {
+                    navMenu.push({
+                        label: headingLabel,
+                        href: '/#' + match[1]
+                    })
+                }
+            }
+
+            for (var label in sourceMenu) {
+                if (!Object.prototype.hasOwnProperty.call(sourceMenu, label)) continue
+                var value = sourceMenu[label]
+                if (Array.isArray(value)) {
+                    navMenu.push({
+                        label: String(label).split('||')[0].trim(),
+                        items: value
+                    })
+                    continue
+                }
+
+                var href = String(value).split('||')[0].trim()
+                var isHomepageAnchor = href === '/' || href === '#' || href.indexOf('/#') === 0 || href.indexOf('#') === 0
+                if (!isHomepageAnchor) {
+                    navMenu.push({
+                        label: label,
+                        href: href
+                    })
+                }
+            }
+        } else {
+            for (var fallbackLabel in sourceMenu) {
+                if (!Object.prototype.hasOwnProperty.call(sourceMenu, fallbackLabel)) continue
+                var fallbackValue = sourceMenu[fallbackLabel]
+                if (Array.isArray(fallbackValue)) {
+                    navMenu.push({
+                        label: String(fallbackLabel).split('||')[0].trim(),
+                        items: fallbackValue
+                    })
+                } else {
+                    navMenu.push({
+                        label: fallbackLabel,
+                        href: String(fallbackValue).split('||')[0].trim()
+                    })
+                }
+            }
+        }
     head
         meta(charset='UTF-8')
         meta(http-equiv="X-UA-Compatible" content="IE=edge")
@@ -16,7 +89,5 @@ html(lang=config.language)
             include ./side-card.pug
             block content
         include ./mobile-nav.pug
-        footer#page_footer
-            include ./footer.pug
         each item in theme.CDN_USE.js
             script(src=url_for(item))
