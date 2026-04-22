@@ -3,7 +3,7 @@ favicon: /img/favicon.png
 avatar: /img/avatar.jpg
 # if author sets in hexo_config, this string doesn't work
 author: 'Quanxiang Liu'
-author_bio: 'Focusing on NeRF, 3DGS, SLAM and Robotics.'
+author_bio: 'PhD student at PolyU.'
 
 since: 2022
 
